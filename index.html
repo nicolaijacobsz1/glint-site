@@ -3,10 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Glint — stop the photo your DLP can't see</title>
-<meta name="description" content="Glint blanks a confidential document when a phone camera is aimed at the screen, and records the attempt. Built by SecureAxis.">
-<meta property="og:title" content="Glint — stop the photo your DLP can't see">
-<meta property="og:description" content="Blanks a confidential document when a phone camera is aimed at the screen, and records the attempt.">
+<title>Glint | Stop phone photos of confidential screens</title>
+<meta name="description" content="Glint is data loss prevention for the camera gap: it blanks a confidential document when a phone is pointed at the screen, and records the attempt. On-device, no video stored. Built by SecureAxis.">
+<link rel="canonical" href="https://glint.secureaxis.net/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Glint by SecureAxis">
+<meta property="og:title" content="Glint | Stop the photo your DLP can't see">
+<meta property="og:description" content="Blanks a confidential document when a phone camera is pointed at the screen, and records the attempt.">
+<meta property="og:url" content="https://glint.secureaxis.net/">
+<meta property="og:image" content="https://glint.secureaxis.net/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#F4F5F6">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 32 32'%3E%3Crect x='-4' y='-4' width='32' height='32' rx='6' fill='%23000'/%3E%3Cpath d='M12%200%2013.6%2010.4%2024%2012%2013.6%2013.6%2012%2024%2010.4%2013.6%200%2012%2010.4%2010.4Z' fill='%23fff'/%3E%3C/svg%3E">
+<script type="application/ld+json">[{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Glint", "url": "https://glint.secureaxis.net/", "image": "https://glint.secureaxis.net/og.png", "applicationCategory": "SecurityApplication", "operatingSystem": "Windows 11", "description": "Glint blanks a confidential document when a phone camera is pointed at the screen, and records the attempt.", "publisher": {"@type": "Organization", "name": "SecureAxis", "url": "https://secureaxis.net/"}}, {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Glint record video?", "acceptedAnswer": {"@type": "Answer", "text": "No. Glint never stores video. When an attempt is detected it logs the time, device, document label and detection scores. A single evidence frame can be kept if your policy turns it on, and it stays in your own storage."}}, {"@type": "Question", "name": "Will it blank my screen when I check my phone?", "acceptedAnswer": {"@type": "Answer", "text": "It can. Glint treats any phone in view of a classified document as a possible capture, because a video can start pointed at the desk and then swing up to the screen. Administrators choose how sure Glint must be that it is looking at a phone, so normal work is interrupted only as much as each site needs. We are measuring this in daily use now and will publish the numbers before the pilot."}}, {"@type": "Question", "name": "What hardware does Glint need?", "acceptedAnswer": {"@type": "Answer", "text": "A Windows 11 device with a working webcam, built in or USB. No special camera is required, and Glint shares the camera with Teams calls instead of locking it."}}, {"@type": "Question", "name": "What happens if someone covers the camera?", "acceptedAnswer": {"@type": "Answer", "text": "Classified documents stay hidden until the camera is working again. Covering the lens, unplugging the camera or turning it off doesn't get around Glint."}}, {"@type": "Question", "name": "Does it work without a network connection?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Detection and blanking run on the device itself, so they keep working when it is offline. Events are sent to your security team when the device reconnects."}}, {"@type": "Question", "name": "Can Glint stop every photo?", "acceptedAnswer": {"@type": "Answer", "text": "No. Detecting a camera and then blanking the screen is a race against a shutter, and a fast enough photo can still win. Glint makes capture deliberate, visible and recorded."}}, {"@type": "Question", "name": "Can I use Glint today?", "acceptedAnswer": {"@type": "Answer", "text": "Glint is in development. We are forming a small pilot group of Windows 11 fleets that handle classified documents. Join the waitlist to hear when places open."}}]}]</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&display=swap" rel="stylesheet">
@@ -186,11 +195,48 @@
   footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px 28px; }
   footer p { margin: 0; max-width: 60ch; }
 
+  /* ---------- logo + nav ---------- */
+  .mark { display: inline-flex; align-items: center; gap: 0.32em; }
+  .mark svg { width: 0.8em; height: 0.8em; fill: currentColor; animation: shine 5s ease-in-out infinite; }
+  @keyframes shine {
+    0%, 86%, 100% { transform: rotate(0) scale(1); }
+    92% { transform: rotate(90deg) scale(1.25); }
+  }
+  .top nav { display: flex; gap: 22px; align-items: baseline; font-size: 0.95rem; }
+  .top nav a { color: var(--muted); text-decoration: none; }
+  .top nav a:hover { color: var(--ink); text-decoration: underline; }
+
+  /* ---------- progress ---------- */
+  ol.log { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
+  ol.log li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 4px 18px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+  ol.log li:first-child { padding-top: 0; }
+  ol.log time { color: var(--muted); font-size: 0.9rem; font-variant-numeric: tabular-nums; padding-top: 0.15em; }
+  ol.log strong { display: block; font-weight: 700; }
+  ol.log span { color: var(--muted); }
+  ol.log li.next time { color: var(--rec); font-weight: 700; }
+
+  /* ---------- faq ---------- */
+  .faq { max-width: var(--measure); }
+  .faq details { border-bottom: 1px solid var(--rule); }
+  .faq details:first-child summary { padding-top: 0; }
+  .faq summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; gap: 18px;
+                 padding: 16px 0; font-weight: 700; font-size: 1.08rem; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; font-weight: 400; font-size: 1.4rem; line-height: 1; color: var(--muted); transition: transform 0.2s; }
+  .faq details[open] summary::after { transform: rotate(45deg); }
+  .faq details p { margin: 0 0 18px; color: var(--muted); }
+
+  footer a.home { font-weight: 600; }
+
   /* ---------- responsive ---------- */
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; gap: 40px; padding: 40px 0 64px; }
     .split { grid-template-columns: 1fr; gap: 20px; }
     section { padding: 56px 0; }
+  }
+  @media (max-width: 720px) {
+    .top nav a.opt { display: none; }
+    ol.log li { grid-template-columns: 1fr; }
   }
   @media (max-width: 520px) {
     .wrap { padding: 0 20px; }
@@ -202,14 +248,20 @@
   }
   @media (prefers-reduced-motion: reduce) {
     .play .finder, .play .blank { animation: none; opacity: 1; }
+    .mark svg { animation: none; }
   }
 </style>
 </head>
 <body>
 
 <header class="wrap top">
-  <a class="mark" href="#">Glint</a>
-  <span class="by">by <a href="https://secureaxis.net">SecureAxis</a></span>
+  <a class="mark" href="#" aria-label="Glint home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0 13.6 10.4 24 12 13.6 13.6 12 24 10.4 13.6 0 12 10.4 10.4Z"/></svg>Glint</a>
+  <nav aria-label="Page">
+    <a class="opt" href="#how">How it works</a>
+    <a class="opt" href="#progress">Progress</a>
+    <a href="#faq">FAQ</a>
+    <span class="by">by <a href="https://secureaxis.net">SecureAxis</a></span>
+  </nav>
 </header>
 
 <main>
@@ -271,19 +323,29 @@
     </div>
   </section>
 
-  <section>
+  <section id="how">
     <div class="wrap split">
       <h2>How it works</h2>
       <ol class="steps">
         <li><strong>A classified document gets focus.</strong><span>Glint reads the sensitivity label. Only Confidential and above turn the camera on, and it turns off again when the document closes or loses focus.</span></li>
-        <li><strong>It looks for a phone aimed at the screen.</strong><span>Detection runs on the laptop itself. Camera frames don't leave the device.</span></li>
-        <li><strong>The document goes black.</strong><span>Just that window, blanked by the operating system rather than the app, so a modified client can't ignore it.</span></li>
+        <li><strong>It watches for a phone in front of the screen.</strong><span>Any phone in view counts, because a video can start pointed at the desk and swing up. Detection runs on the laptop itself, and camera frames don't leave the device.</span></li>
+        <li><strong>The document goes black straight away.</strong><span>Just that window, on whichever monitor it is on, blanked by the operating system rather than the app, so a modified client can't ignore it.</span></li>
         <li><strong>The attempt is recorded.</strong><span>Time, device, document label and detection scores go to your security team. An evidence frame is optional and stays in your own storage.</span></li>
       </ol>
     </div>
   </section>
 
   <section>
+    <div class="wrap split">
+      <h2>Covering the camera doesn't get around it</h2>
+      <div class="prose">
+        <p>If the camera is covered, unplugged or switched off, classified documents stay hidden until it is working again. A working camera becomes a condition for viewing them, not an optional extra.</p>
+        <p>That is a policy choice, and some sites can't allow cameras at all. For them we are building a mode that blocks screenshots and screen recording of classified documents without using the camera.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="privacy">
     <div class="wrap split">
       <h2>Designed to get through a privacy review</h2>
       <ul class="facts">
@@ -307,7 +369,40 @@
     </div>
   </section>
 
-  <section class="cta">
+  <section id="progress">
+    <div class="wrap split">
+      <div>
+        <h2>Progress</h2>
+        <p style="color:var(--muted);margin:0;max-width:30ch">What has been built and tested so far. Newest first.</p>
+      </div>
+      <ol class="log">
+        <li class="next"><time>Next</time><div><strong>Pilot with a small group of Windows 11 fleets</strong><span>Along with the false-blank rate measured in daily use, published before anyone is asked to roll it out.</span></div></li>
+        <li><time datetime="2026-11">November 2026</time><div><strong>Pilot waitlist opened</strong><span>This page went live.</span></div></li>
+        <li><time datetime="2026-11">November 2026</time><div><strong>Daily-use testing began</strong><span>Glint runs through ordinary working days on our own Windows and Mac machines, logging every time it would have blanked the screen.</span></div></li>
+        <li><time datetime="2026-11">November 2026</time><div><strong>Works alongside video calls</strong><span>Glint now shares the camera with Microsoft Teams instead of locking it, so meetings and protection run at the same time.</span></div></li>
+        <li><time datetime="2026-11">November 2026</time><div><strong>Multi-monitor blanking</strong><span>The blank follows the classified document to whichever screen it is on.</span></div></li>
+        <li><time datetime="2026-09">September 2026</time><div><strong>Classification-aware camera</strong><span>The camera turns on only while a Confidential or higher document is open in an app or browser tab.</span></div></li>
+        <li><time datetime="2026-08">August 2026</time><div><strong>First working prototype</strong><span>On-device phone detection, and blanking of the document window.</span></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap split">
+      <h2>Questions</h2>
+      <div class="faq">
+        <details><summary>Does Glint record video?</summary><p>No. Glint never stores video. When an attempt is detected it logs the time, device, document label and detection scores. A single evidence frame can be kept if your policy turns it on, and it stays in your own storage.</p></details>
+        <details><summary>Will it blank my screen when I check my phone?</summary><p>It can. Glint treats any phone in view of a classified document as a possible capture, because a video can start pointed at the desk and then swing up to the screen. Administrators choose how sure Glint must be that it is looking at a phone, so normal work is interrupted only as much as each site needs. We are measuring this in daily use now and will publish the numbers before the pilot.</p></details>
+        <details><summary>What hardware does Glint need?</summary><p>A Windows 11 device with a working webcam, built in or USB. No special camera is required, and Glint shares the camera with Teams calls instead of locking it.</p></details>
+        <details><summary>What happens if someone covers the camera?</summary><p>Classified documents stay hidden until the camera is working again. Covering the lens, unplugging the camera or turning it off doesn't get around Glint.</p></details>
+        <details><summary>Does it work without a network connection?</summary><p>Yes. Detection and blanking run on the device itself, so they keep working when it is offline. Events are sent to your security team when the device reconnects.</p></details>
+        <details><summary>Can Glint stop every photo?</summary><p>No. Detecting a camera and then blanking the screen is a race against a shutter, and a fast enough photo can still win. Glint makes capture deliberate, visible and recorded.</p></details>
+        <details><summary>Can I use Glint today?</summary><p>Glint is in development. We are forming a small pilot group of Windows 11 fleets that handle classified documents. Join the waitlist to hear when places open.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="waitlist">
     <div class="wrap split">
       <h2>Join the pilot waitlist</h2>
       <div class="prose">
@@ -329,7 +424,7 @@
 <footer>
   <div class="wrap">
     <p>Your email is used only to contact you about Glint. To be removed, email <a href="mailto:nicolai@secureaxis.net">nicolai@secureaxis.net</a>.</p>
-    <p>© 2026 <a href="https://secureaxis.net">SecureAxis</a></p>
+    <p>Glint is built by <a class="home" href="https://secureaxis.net">SecureAxis</a>, cyber security consulting. © 2026</p>
   </div>
 </footer>
 
