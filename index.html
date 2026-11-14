@@ -468,7 +468,7 @@
         if (!r.ok) throw new Error(r.status);
         form.querySelector(".row").hidden = true;
         form.querySelector("label").hidden = true;
-        status.textContent = "You're on the list. We'll email you when pilot places open.";
+        status.textContent = "You're on the list. We've sent a confirmation to " + email + ".";
       } catch (err) {
         status.classList.add("err");
         status.textContent = "Couldn't join the list just now. Check the address and try again, or email nicolai@secureaxis.net.";
